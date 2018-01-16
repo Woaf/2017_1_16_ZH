@@ -9,25 +9,15 @@ struct worker
     int salary;
 };
 
-// 1. összegzés tétel
-int calculate_total_wage(worker workers[], int size);
-
-// 2. maximumkeresés tétel
-int calculate_days_worked_of_max_salary(worker workers[], int size);
-
-// 3. feltételes max keresés és összegzés
-int calculate_max_numer_of_workers_on_the_same_day(worker workers[], int size);
-
-// 4. max keresés
-int calculate_max_interval(worker workers[], int size);
-
-// 5. keresés tétel
-//bool empty_days(worker workers[], int size);
-void empty_days(worker workers[], int size);
-
 int main()
 {
 
+    //   ___  _   _  ____   _   _  _____
+    //  |_ _|| \ | ||  _ \ | | | ||_   _|
+    //   | | |  \| || |_) || | | |  | |
+    //   | | | |\  ||  __/ | |_| |  | |
+    //  |___||_| \_||_|     \___/   |_|
+    //
     int number_of_workers;
     // cin >> number_of_workers;
     number_of_workers = 5;
@@ -47,28 +37,28 @@ int main()
     workers[3].day_start = 2;  workers[3].day_end = 4;  workers[3].salary = 500;
     workers[4].day_start = 10; workers[4].day_end = 12; workers[4].salary = 100;
 
-
-    cout << "#" << endl << calculate_total_wage(workers, number_of_workers) << endl << "#" << endl;
-    cout << calculate_days_worked_of_max_salary(workers, number_of_workers) << endl << "#" << endl;
-    cout << calculate_max_numer_of_workers_on_the_same_day(workers, number_of_workers) << endl << "#" << endl;
-    cout << calculate_max_interval(workers, number_of_workers) << endl << "#" << endl;
-    empty_days(workers, number_of_workers);
-
-    return 0;
-}
-
-int calculate_total_wage(worker workers[], int size)
-{
+    cout << "#" << endl;
+    //   _
+    //  / |
+    //  | |
+    //  | |
+    //  |_|
+    //
     int total_wage = 0;
     for(int i = 0; i < size; i++)
     {
         total_wage += (workers[i].day_end - workers[i].day_start +1) * workers[i].salary;
     }
-    return total_wage;
-}
+    cout << total_wage << endl;
 
-int calculate_days_worked_of_max_salary(worker workers[], int size)
-{
+    cout << "#" << endl;
+    //   ____
+    //  |___ \
+    //    __) |
+    //   / __/
+    //  |_____|
+    //
+
     // ez meg lehet oldani egyetlen ciklussal, de inkább hosszabban írom le hátha úgy érthetőbb
 
     // kiszámoljuk az összes jövedelmet
@@ -102,100 +92,59 @@ int calculate_days_worked_of_max_salary(worker workers[], int size)
         workers_iterator++;
     }
 
-    return days_worked;
-}
+    cout << days_worked << endl;
 
-int calculate_max_numer_of_workers_on_the_same_day(worker workers[], int size)
-{
-
-    int earliest_start = 10000000;
+    cout << "#" << endl;
+    //   _____
+    //  |___ /
+    //    |_ \
+    //   ___) |
+    //  |____/
+    //
     int latest_end = 0;
-
     for(int i = 0; i < size; i++)
     {
-        if(workers[i].day_start < earliest_start)
-        {
-            earliest_start = workers[i].day_start;
-        }
-
         if(workers[i].day_end > latest_end)
         {
             latest_end = workers[i].day_end;
         }
     }
 
-    int days_range = latest_end - earliest_start + 1;
-    int number_of_ppl_each_day[days_range];
-    for(int i = 0; i < days_range; i++)
+    int max_workers_on_a_day[latest_end];
+    for(int i = 0; i < latest_end; i++)
     {
-        number_of_ppl_each_day[i] = 0;
+        max_workers_on_a_day[i] = 0;
     }
 
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < number_of_workers; i++)
     {
-        for(int j = workers[i].day_start; j < workers[i].day_end; j++)
+        for(int j = workers[i].day_start-1; j < workers[i].day_end; j++)
         {
-            number_of_ppl_each_day[days_range-j]++;
+            max_workers_on_a_day[j]++;
         }
     }
 
-    int max_number_of_workers_on_same_day = 0;
-    for(int i = 0; i < days_range; i++)
+    int max_number_of_ppl_on_a_day = 0;
+    for(int i = 0; i < latest_end; i++)
     {
-        if(number_of_ppl_each_day[i] > max_number_of_workers_on_same_day)
-        {
-            max_number_of_workers_on_same_day = number_of_ppl_each_day[i];
-        }
+        if(max_number_of_ppl_on_a_day < max_workers_on_a_day[i])
+            max_number_of_ppl_on_a_day = max_workers_on_a_day[i];
     }
 
-    return max_number_of_workers_on_same_day;
-}
+    cout << max_number_of_ppl_on_a_day << endl;
 
-int calculate_max_interval(worker workers[], int size)
-{
-    // UGYANAZ MINT AZ ELŐZŐ FÜGGVÉNYBEN
-    int earliest_start = numeric_limits<int>::max();
-    int latest_end = 0;
-
-    for(int i = 0; i < size; i++)
-    {
-        if(workers[i].day_start < earliest_start)
-        {
-            earliest_start = workers[i].day_start;
-        }
-
-        if(workers[i].day_end > latest_end)
-        {
-            latest_end = workers[i].day_end;
-        }
-    }
-
-    int days_range = latest_end - earliest_start + 1;
-    int number_of_ppl_each_day[days_range];
-
-    for(int i = 0; i < size; i++)
-    {
-        for(int j = workers[i].day_start; j < workers[i].day_end; j++)
-        {
-            number_of_ppl_each_day[j-days_range]++;
-        }
-    }
-
-    int max_number_of_workers_on_same_day = 0;
-    for(int i = 0; i < days_range; i++)
-    {
-        if(number_of_ppl_each_day[i] > max_number_of_workers_on_same_day)
-        {
-            max_number_of_workers_on_same_day = number_of_ppl_each_day[i];
-        }
-    }
-    // /////////////////////////////////
-
+    cout << "#" << endl;
+    //   _  _
+    //  | || |
+    //  | || |_
+    //  |__   _|
+    //     |_|
+    //
     int max_interval = 0;
     int interval_counter = 1;
     for(int i = 0; i < days_range; i++)
     {
-        if(number_of_ppl_each_day[i] == max_number_of_workers_on_same_day)
+        if(max_workers_on_a_day[i] == max_number_of_ppl_on_a_day)
         {
             interval_counter++;
             if(max_interval < interval_counter)
@@ -209,32 +158,15 @@ int calculate_max_interval(worker workers[], int size)
         }
     }
 
-    return max_interval;
-}
+    cout << max_interval << endl;
 
-void empty_days(worker workers[], int size)
-{
-    int latest_end = 0;
-    for(int i = 0; i < size; i++)
-    {
-        if(latest_end < workers[i].day_end)
-            latest_end = workers[i].day_end;
-    }
-
-    int workers_on_each_day_from_day_zero[latest_end];
-    for(int i = 0; i < latest_end; i++)
-    {
-        workers_on_each_day_from_day_zero[i] = 0;
-    }
-
-    for(int i = 0; i < size; i++)
-    {
-        for(int j = workers[i].day_start-1; j < workers[i].day_end; j++)
-        {
-            workers_on_each_day_from_day_zero[j]++;
-        }
-    }
-
+    cout << "#" << endl;
+    //   ____
+    //  | ___|
+    //  |___ \
+    //   ___) |
+    //  |____/
+    //
     for(int i = 1; i < latest_end-1; i++)
     {
         if((workers_on_each_day_from_day_zero[i-1] != 0) && (workers_on_each_day_from_day_zero[i] == 0))
@@ -248,46 +180,5 @@ void empty_days(worker workers[], int size)
         }
     }
 
+    return 0;
 }
-
-//bool empty_days(worker workers[], int size)
-//{
-//    int earliest_start = numeric_limits<int>::max();
-//    int latest_end = 0;
-
-//    for(int i = 0; i < size; i++)
-//    {
-//        if(workers[i].day_start < earliest_start)
-//        {
-//            earliest_start = workers[i].day_start;
-//        }
-
-//        if(workers[i].day_end > latest_end)
-//        {
-//            latest_end = workers[i].day_end;
-//        }
-//    }
-
-//    int days_range = latest_end - earliest_start + 1;
-//    int number_of_ppl_each_day[days_range];
-
-//    for(int i = 0; i < size; i++)
-//    {
-//        for(int j = workers[i].day_start; j < workers[i].day_end; j++)
-//        {
-//            number_of_ppl_each_day[j-days_range]++;
-//        }
-//    }
-
-//    bool is_there_an_empty_day = false;
-//    int array_iterator = 0;
-//    while(!is_there_an_empty_day && array_iterator < days_range)
-//    {
-//        if(number_of_ppl_each_day[array_iterator] == 0)
-//        {
-//            return true;
-//        }
-//        array_iterator++;
-//    }
-//    return false;
-//}
