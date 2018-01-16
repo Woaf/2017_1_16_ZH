@@ -45,7 +45,7 @@ int main()
     //  |_|
     //
     int total_wage = 0;
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < number_of_workers; i++)
     {
         total_wage += (workers[i].day_end - workers[i].day_start +1) * workers[i].salary;
     }
@@ -62,15 +62,15 @@ int main()
     // ez meg lehet oldani egyetlen ciklussal, de inkább hosszabban írom le hátha úgy érthetőbb
 
     // kiszámoljuk az összes jövedelmet
-    int wages[size];
-    for(int i = 0; i < size; i++)
+    int wages[number_of_workers];
+    for(int i = 0; i < number_of_workers; i++)
     {
         wages[i] = (workers[i].day_end - workers[i].day_start + 1) * workers[i].salary;
     }
 
     // megkeressük a jövedelmek maximumát
     int max_wage = 0;
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < number_of_workers; i++)
     {
         if(wages[i] > max_wage)
         {
@@ -102,7 +102,7 @@ int main()
     //  |____/
     //
     int latest_end = 0;
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < number_of_workers; i++)
     {
         if(workers[i].day_end > latest_end)
         {
@@ -141,8 +141,8 @@ int main()
     //     |_|
     //
     int max_interval = 0;
-    int interval_counter = 1;
-    for(int i = 0; i < days_range; i++)
+    int interval_counter = 0;
+    for(int i = 0; i < latest_end; i++)
     {
         if(max_workers_on_a_day[i] == max_number_of_ppl_on_a_day)
         {
@@ -154,7 +154,7 @@ int main()
         }
         else
         {
-            interval_counter = 1;
+            interval_counter = 0;
         }
     }
 
@@ -169,12 +169,12 @@ int main()
     //
     for(int i = 1; i < latest_end-1; i++)
     {
-        if((workers_on_each_day_from_day_zero[i-1] != 0) && (workers_on_each_day_from_day_zero[i] == 0))
+        if((max_workers_on_a_day[i-1] != 0) && (max_workers_on_a_day[i] == 0))
         {
             cout << i+1 << " ";
         }
 
-        if((workers_on_each_day_from_day_zero[i] == 0) && (workers_on_each_day_from_day_zero[i+1] != 0))
+        if((max_workers_on_a_day[i] == 0) && (max_workers_on_a_day[i+1] != 0))
         {
             cout << i+1 << endl;
         }
